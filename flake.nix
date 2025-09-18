@@ -20,7 +20,10 @@
         inherit system;
         modules = [
           ./configuration.nix
-          (import ./pkgs.nix { inherit config pkgs lib valenpkgs; })
+          (import ./pkgs.nix { 
+	    inherit config valenpkgs;
+	    lib = pkgs.lib;
+	  })
         ];
       };
     };
