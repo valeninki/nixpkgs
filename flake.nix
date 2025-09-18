@@ -1,5 +1,5 @@
 {
-  description = "Valen's Private Flake for Custom Packages.";
+  description = "Valen's Private Flake with custom packages";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
@@ -9,21 +9,13 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-
-      valenpkgs = {
-        topmem = pkgs.callPackage ./pkgs/applications/system/topmem {};
-        zmem   = pkgs.callPackage ./pkgs/applications/system/zmem {};
-      };
     in
     {
       nixosConfigurations.Parud = nixpkgs.lib.nixosSystem {
         inherit system;
+
         modules = [
-          ./configuration.nix
-          (import ./pkgs.nix { 
-	    inherit config valenpkgs;
-	    lib = pkgs.lib;
-	  })
+          ./pkgs.nix
         ];
       };
     };

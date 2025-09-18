@@ -1,9 +1,9 @@
-{ config, pkgs, lib, valenpkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   environment.systemPackages = with pkgs; [
-    valenpkgs.topmem
-    valenpkgs.zmem
+    (pkgs.callPackage ./pkgs/applications/system/topmem {})
+    (pkgs.callPackage ./pkgs/applications/system/zmem {})
   ];
 }
 
