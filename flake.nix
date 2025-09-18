@@ -11,13 +11,9 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      nixosConfigurations.Parud = nixpkgs.lib.nixosSystem {
-        inherit system;
-
-        modules = [
-          ./pkgs.nix
-        ];
+      packages.${system} = {
+        topmem = pkgs.callPackage ./pkgs/applications/system/topmem {};
+        zmem   = pkgs.callPackage ./pkgs/applications/system/zmem {};
       };
     };
 }
-
