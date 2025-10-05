@@ -2,7 +2,7 @@
   description = "Valen's Private Flake with custom packages";
 
   inputs = {
-    nixpkgs {
+    nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-25.05";
     };
     unixpkgs = {
