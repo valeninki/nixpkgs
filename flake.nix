@@ -18,6 +18,7 @@
 	"aarch64-linux"
       ];
       perSystem = {
+        pkgs,
         config,
 	self',
 	inputs',
