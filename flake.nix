@@ -11,31 +11,26 @@
     };
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-	"aarch64-linux"
-      ];
-      perSystem = {
-        pkgs,
-        config,
-	self',
-	inputs',
-	...
-      }: 
-      {
+  outputs = 
+  { self, nixpkgs, flake-parts, ... }: {
+    flakeModule = {
+      options = {
+        valenpkgs = flake-parts.lib.mkOption {
+	  type = types.bool;
+	  default = true;
+	};
+      };
+
+      config = { valenpkgs, lib, ... }: {
         imports = [
-	  inputs.valenpkgs.flakeModule
 	  ./modules/flake
 	];
 
-	environment.systemPackages = with pkgs; [
+	environment.systemPackages = lib.mkIfvalenpkgs [
 	  zmem
 	  topmem
 	];
-      };
-
-
+      }
     };
+  }
 }
