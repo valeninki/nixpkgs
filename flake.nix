@@ -32,6 +32,8 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
+	topmem = import ./modules/flake/topmem { inherit pkgs; };
+	zmem = import ./modules/flake/zmem { inherit pkgs; };
 
 	environment.systemPackages = with pkgs; [
 	  topmem
