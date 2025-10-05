@@ -14,7 +14,7 @@
   outputs = 
   { self, nixpkgs, flake-parts, ... }: {
     flakeModule = {
-      options = {
+      options= {
         valenpkgs = flake-parts.lib.mkOption {
 	  type = nixpkgs.lib.types.bool;
 	  default = true;
@@ -26,7 +26,7 @@
 	  ./modules/flake
 	];
 
-	environment.systemPackages = lib.mkIfvalenpkgs [
+	environment.systemPackages = lib.mkIf valenpkgs [
 	  pkgs.zmem
 	  pkgs.topmem
 	];
