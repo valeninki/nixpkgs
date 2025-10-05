@@ -16,7 +16,7 @@
     flakeModule = {
       options = {
         valenpkgs = flake-parts.lib.mkOption {
-	  type = types.bool;
+	  type = nixpkgs.lib.types.bool;
 	  default = true;
 	};
       };
