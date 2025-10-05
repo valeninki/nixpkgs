@@ -21,16 +21,16 @@
 	};
       };
 
-      config = { valenpkgs, lib, ... }: {
+      config = { valenpkgs, lib, pkgs, ... }: {
         imports = [
 	  ./modules/flake
 	];
 
 	environment.systemPackages = lib.mkIfvalenpkgs [
-	  zmem
-	  topmem
+	  pkgs.zmem
+	  pkgs.topmem
 	];
-      }
-    }
-  }
+      };
+    };
+  };
 }
