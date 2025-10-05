@@ -10,7 +10,7 @@
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs.follow = "unixpkgs";
+      inputs.nixpkgs.follows = "unixpkgs";
     };
   };
 
