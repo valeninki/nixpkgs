@@ -10,6 +10,6 @@
         self.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs
       ];
     };
-    valenpkgs = self.outputs.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs
+    valenpkgs = self.outputs.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs;
   };
 }
