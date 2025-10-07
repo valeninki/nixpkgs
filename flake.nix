@@ -20,6 +20,11 @@
       perSystem = { pkgs, ... }: {
         packages.topmem = pkgs.callPackage ./modules/nixos/topmem {};
 	packages.zmem = pkgs.callPackage ./modules/nixos/zmem {};
+
+	nixosModules.valenpkgs = {
+	  options = {};
+	  config = {};
+	};
       };
     };
 }
