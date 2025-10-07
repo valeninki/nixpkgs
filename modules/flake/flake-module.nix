@@ -9,7 +9,7 @@
   nixosModules = {
     valenpkgs = {
       config, pkgs, ... }: {
-        environment.systemPackages = [
+        environment.systemPackages = with pkgs; [
           self.packages.topmem
           self.packages.zmem
         ];
