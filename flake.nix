@@ -14,27 +14,21 @@
     };
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
+    flake-parts.lib.mkFlake {
       imports = [
-        ./modules/flake
+        self.flakeModule
       ];
       systems = [ 
         "x86_64-linux" 
         "aarch64-linux" 
       ];
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
-        packages = {
-	  topmem = pkgs.callPackage./modules/flake/topmem {};
-	  zmem = pkgs.callPackage./modules/flake/topmem {};
-	};
-
+      perSystem = { config, pkgs, system, ... }: {
 	nixosModules = {
 	  valenpkgs = {config, pkgs, ...}: {
-
-	    environment.systemPackages = [
-	      self'.packages.topmem
-	      self'.packages.zmem
+	    environment.systemPackages = with pkgs; [
+	      self.packages.topmem
+	      self.packages.zmem
 	    ];
 	  };
 	};
