@@ -18,8 +18,8 @@
 	"aarch64-linux"
       ];
       perSystem = { pkgs, ... }: {
-        packages.topmem = pkgs.callPackage ./modules/flake/topmem {};
-	packages.zmem = pkgs.callPackage ./modules/flake/zmem {};
+        packages.topmem = pkgs.callPackage ./modules/nixos/topmem {};
+	packages.zmem = pkgs.callPackage ./modules/nixos/zmem {};
       };
     };
 }
