@@ -21,7 +21,6 @@
 	"aarch64-linux"
       ];
       perSystem = { config, self', inputs', pkgs, ... }: {
-       valenpkgs = self.outputs.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs;
       };
     };
 }
