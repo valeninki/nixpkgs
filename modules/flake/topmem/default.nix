@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs ? import <nixpkgs> {} }:
 
 pkgs.stdenv.mkDerivation {
   pname = "topmem";

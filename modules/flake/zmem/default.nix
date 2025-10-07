@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs ? import <nixpkgs> {} }:
 
   pkgs.rustPlatform.buildRustPackage rec {
     pname = "zmem";
