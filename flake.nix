@@ -17,17 +17,8 @@
         "x86_64-linux"
 	"aarch64-linux"
       ];
-      perSystem = { pkgs, ... }: {
-        packages.topmem = pkgs.callPackage ./modules/nixos/topmem {};
-	packages.zmem = pkgs.callPackage ./modules/nixos/zmem {};
-
-	nixosModules.valenpkgs = {
-	  options = {};
-	  config = {};
-	};
-      };
-      nixosModules = {
-        valenpkgs = self.perSystem.x86_64-linux.nixosModules.valenpkgs;
+      perSystem = { config, self', inputs', pkgs, ... }: {
+      
       };
     };
 }
