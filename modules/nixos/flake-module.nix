@@ -7,8 +7,9 @@
   flake = {
     nixosModules.valenpkgs = { pkgs, ... }: {
       environment.systemPackages = [
-        self.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.valenpkgs
+        self.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs
       ];
     };
+    valenpkgs = self.outputs.packages.${pkgs.stdenv.hostPlatform.system}.valenpkgs
   };
 }
