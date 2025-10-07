@@ -28,6 +28,6 @@
       };
       nixosModules = {
         valenpkgs = self.perSystem.x86_64-linux.nixosModules.valenpkgs;
-      }
+      };
     };
 }
