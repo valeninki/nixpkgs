@@ -5,36 +5,21 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-25.05";
     };
-    unixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-unstable";
-    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs.follows = "unixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
-    flake-parts.lib.mkFlake {
-      imports = [
-        self.flakeModule
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; }
+    {
+      systems = [
+        "x86_64-linux"
+	"aarch64-linux"
       ];
-      systems = [ 
-        "x86_64-linux" 
-        "aarch64-linux" 
-      ];
-      perSystem = { config, pkgs, system, ... }: {
-	nixosModules = {
-	  valenpkgs = {config, pkgs, ...}: {
-	    environment.systemPackages = with pkgs; [
-	      self.packages.topmem
-	      self.packages.zmem
-	    ];
-	  };
-	};
-      };
-      flake = {
-
+      perSystem = { pkgs, ... }: {
+        packages.topmem = pkgs.callPackage ./modules/flake/topmem {};
+	packages.zmem = pkgs.callPackage ./modules/flake/zmem {};
       };
     };
 }
