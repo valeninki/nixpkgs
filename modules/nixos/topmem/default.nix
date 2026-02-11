@@ -3,14 +3,14 @@
 pkgs.stdenv.mkDerivation {
   pname = "topmem";
   version = "6b32afb";
-  
+
   src = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/CachyOS/CachyOS-Settings/refs/heads/master/usr/bin/topmem";
     sha256 = "1xhg90vrzddn61nglbq1f20kzhsrqp67jv2zd535h9w9byrmkhci";
   };
-  
+
   buildInputs = [
-    (pkgs.lua5_3.withPackages (ps: with ps; [ luv ]))
+    (pkgs.lua5_4.withPackages (ps: with ps; [ luv ]))
   ];
 
   dontUnpack = true;
@@ -21,4 +21,3 @@ pkgs.stdenv.mkDerivation {
     chmod +x $out/bin/topmem
   '';
 }
-

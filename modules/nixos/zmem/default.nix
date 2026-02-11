@@ -1,8 +1,8 @@
 { pkgs }:
 
-  pkgs.rustPlatform.buildRustPackage rec {
-    pname = "zmem";
-    version = "140d37e";
+pkgs.rustPlatform.buildRustPackage rec {
+  pname = "zmem";
+  version = "140d37e";
 
   src = pkgs.fetchFromGitHub {
     owner = "xeome";
@@ -18,4 +18,3 @@
     homepage = "https://github.com/xeome/zmem";
   };
 }
-
