@@ -1,34 +1,48 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchurl,
+  p7zip,
   wineWow64,
   makeWrapper,
-  writeShellScriptBin,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "AgOpenGPS";
   version = "6.8.1";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/AgOpenGPS-Official/AgOpenGPS/releases/download/${version}/AgOpenGPS_${version}.zip";
-    hash = "sha256:c36b6c8d7db43bd1084425cfec0e2ec553544b384448e00c7d59bf7624212d18";
-    stripRoot = false;
+    hash = "sha256-w2tsjX20O9EIRCXP7A4uxVNUSzhESOAMfVm/diQhLRg=";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
+  
+  dontUnpack = true;
+  nativeBuildInputs = [ p7zip makeWrapper ];
 
   installPhase = ''
     	  runHook preInstall
 
-    	  mkdir -p $out/share/agopengps
-    	  cp -r * $out/share/agopengps
+		  export HOME=$TMPDIR
+    	  
+		  mkdir -p source_temp
+		  
+		  7z x $src -osource_temp -y
+
+		  mkdir -p $out/share/agopengps
+
+		  if [ -d "source_temp/Source" ]; then
+            cp -r source_temp/Source/* $out/share/agopengps/
+		  elif [ -d "source_temp/source" ]; then
+		    cp -r source_temp/source/* $out/share/agopengps/
+		  else
+		    cp -r source_temp/* $out/share/agopengps/
+          fi
+
     	  mkdir -p $out/bin
 
     	  makeWrapper ${wineWow64}/bin/wine $out/bin/agopengps \
-    	    --run "export WINEPREFIX=$HOME/.local/share/agopengps-prefix" \
-    		--run "mkdir -p \$WINEPREFIX" \
+    	    --run 'export WINEPREFIX="$HOME/.local/share/agopengps-prefix"' \
+    		--run 'mkdir -p "$WINEPREFIX"' \
     		--add-flags "$out/share/agopengps/AgOpenGPS.exe"
           
     	  runHook postInstall
@@ -39,6 +53,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/AgOpenGPS-Offical/AgOpenGPS";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
+	mainProgram = "agopengps";
     maintainers = with maintainers; [ "Kerem" ];
   };
 }
