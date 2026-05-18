@@ -1,4 +1,9 @@
-{ self, lib, ... }:
+{ 
+  self,
+  lib, 
+  ... 
+}:
+
 {
 
   perSystem =
@@ -18,15 +23,5 @@
 		};
       };
     };
-  flake = {
-    nixosModules.valenpkgs =
-      { pkgs, ... }:
-      {
-        environment.systemPackages = [
-          self.packages.${pkgs.stdenv.hostPlatform.system}.topmem
-          self.packages.${pkgs.stdenv.hostPlatform.system}.zmem
-          self.packages.${pkgs.stdenv.hostPlatform.system}.agopengps
-        ];
-      };
-  };
+
 }

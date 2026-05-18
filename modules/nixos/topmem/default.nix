@@ -1,4 +1,6 @@
-{ pkgs }:
+{ 
+  pkgs
+}:
 
 pkgs.stdenv.mkDerivation {
   pname = "topmem";

@@ -1,4 +1,6 @@
-{ pkgs }:
+{ 
+  pkgs 
+}:
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "zmem";
