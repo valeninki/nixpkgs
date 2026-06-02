@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
 	mainProgram = "agopengps";
-    maintainers = with maintainers; [ "Kerem" ];
+    maintainers = [ "Kerem" ];
   };
 }

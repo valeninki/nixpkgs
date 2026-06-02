@@ -2,12 +2,8 @@
   description = "Valen's Private Flake with custom packages";
 
   inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-25.11";
-    };
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
@@ -21,14 +17,21 @@
         "aarch64-linux"
       ];
       perSystem =
+        { pkgs, self', ... }:
         {
-          config,
-          self',
-          inputs',
-          pkgs,
-          ...
-        }:
-        {
+          formatter = pkgs.nixpkgs-fmt;
+
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixpkgs-fmt
+              statix
+              deadnix
+            ];
+          };
+
+          checks = {
+            inherit (self'.packages) topmem zmem agopengps psa-update;
+          };
         };
     };
 }
