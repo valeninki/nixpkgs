@@ -2,7 +2,9 @@
   description = "Valen's Private Flake with custom packages";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
+    nixos-hardware.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
@@ -30,7 +32,13 @@
           };
 
           checks = {
-            inherit (self'.packages) topmem zmem agopengps psa-update;
+            inherit (self'.packages) topmem zmem psa-update;
+          }
+          // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
+            inherit (self'.packages) agopengps;
+          }
+          // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
+            inherit (self'.packages) linux-rpi4-minimal;
           };
         };
     };

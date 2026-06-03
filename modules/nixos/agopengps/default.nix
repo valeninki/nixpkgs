@@ -15,45 +15,47 @@ stdenv.mkDerivation rec {
     url = "https://github.com/AgOpenGPS-Official/AgOpenGPS/releases/download/${version}/AgOpenGPS_${version}.zip";
     hash = "sha256-w2tsjX20O9EIRCXP7A4uxVNUSzhESOAMfVm/diQhLRg=";
   };
-  
+
   dontUnpack = true;
-  nativeBuildInputs = [ p7zip makeWrapper ];
+  nativeBuildInputs = [
+    p7zip
+    makeWrapper
+  ];
 
   installPhase = ''
-    	  runHook preInstall
+    runHook preInstall
 
-		  export HOME=$TMPDIR
-    	  
-		  mkdir -p source_temp
-		  
-		  7z x $src -osource_temp -y
+    export HOME=$TMPDIR
 
-		  mkdir -p $out/share/agopengps
+    mkdir -p source_temp
+    7z x $src -osource_temp -y
 
-		  if [ -d "source_temp/Source" ]; then
-            cp -r source_temp/Source/* $out/share/agopengps/
-		  elif [ -d "source_temp/source" ]; then
-		    cp -r source_temp/source/* $out/share/agopengps/
-		  else
-		    cp -r source_temp/* $out/share/agopengps/
-          fi
+    mkdir -p $out/share/agopengps
 
-    	  mkdir -p $out/bin
+    if [ -d "source_temp/Source" ]; then
+      cp -r source_temp/Source/* $out/share/agopengps/
+    elif [ -d "source_temp/source" ]; then
+      cp -r source_temp/source/* $out/share/agopengps/
+    else
+      cp -r source_temp/* $out/share/agopengps/
+    fi
 
-    	  makeWrapper ${wineWow64}/bin/wine $out/bin/agopengps \
-    	    --run 'export WINEPREFIX="$HOME/.local/share/agopengps-prefix"' \
-    		--run 'mkdir -p "$WINEPREFIX"' \
-    		--add-flags "$out/share/agopengps/AgOpenGPS.exe"
-          
-    	  runHook postInstall
+    mkdir -p $out/bin
+
+    makeWrapper ${wineWow64}/bin/wine $out/bin/agopengps \
+      --run 'export WINEPREFIX="$HOME/.local/share/agopengps-prefix"' \
+      --run 'mkdir -p "$WINEPREFIX"' \
+      --add-flags "$out/share/agopengps/AgOpenGPS.exe"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "AgOpenGPS - Open Source Agricultural Guidance";
-    homepage = "https://github.com/AgOpenGPS-Offical/AgOpenGPS";
-    license = licenses.gpl3;
+    homepage = "https://github.com/AgOpenGPS-Official/AgOpenGPS";
+    license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-	mainProgram = "agopengps";
-    maintainers = [ "Kerem" ];
+    mainProgram = "agopengps";
+    maintainers = [ { name = "Kerem"; } ];
   };
 }

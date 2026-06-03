@@ -11,10 +11,10 @@ pkgs.rustPlatform.buildRustPackage rec {
     owner = "zeld";
     repo = pname;
     rev = version;
-    sha256 = "0f998jzyig2338hls95iqrb12aqmai9yjhi8785i4d5d47b3vk6m";
+    hash = "sha256-1cw91iGtNBILOihC6VNUFSsRVsaxJE0hGkO86L9EKTk=";
   };
 
-  cargoHash = "sha256-+LNVOuyDoEZjffydY7ZjzMBCq3+wvSMYdbWL3qMBEJk=";
+  cargoHash = "sha256-pkBjVybga4yUmy8jpUfYi9i8eeRU2sIFEweDZLffP4o=";
 
   nativeBuildInputs = [ pkgs.pkg-config ];
 
@@ -24,7 +24,8 @@ pkgs.rustPlatform.buildRustPackage rec {
     description = "CLI alternative to Stellantis (Peugeot/Citroën/DS/Opel) update applications for car infotainment systems";
     homepage = "https://github.com/zeld/psa-update";
     license = licenses.unlicense;
-    maintainers = [ "Kerem" ];
+    platforms = platforms.linux;
     mainProgram = "psa-update";
+    maintainers = [ { name = "Kerem"; } ];
   };
 }

@@ -1,15 +1,17 @@
-{ 
-  pkgs
+{
+  pkgs,
 }:
 
 pkgs.stdenv.mkDerivation {
   pname = "topmem";
-  version = "6b32afb";
+  version = "unstable-2025-05-30";
 
   src = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/CachyOS/CachyOS-Settings/refs/heads/master/usr/bin/topmem";
-    sha256 = "1xhg90vrzddn61nglbq1f20kzhsrqp67jv2zd535h9w9byrmkhci";
+    url = "https://raw.githubusercontent.com/CachyOS/CachyOS-Settings/6b32afb/usr/bin/topmem";
+    hash = "sha256-kcFZs1+JJ1hGaV9seczFWcM/gXABL/psMLa1nzdID/Y=";
   };
+
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   buildInputs = [
     (pkgs.lua5_4.withPackages (ps: with ps; [ luv ]))
@@ -21,5 +23,15 @@ pkgs.stdenv.mkDerivation {
     mkdir -p $out/bin
     cp $src $out/bin/topmem
     chmod +x $out/bin/topmem
+    wrapProgram $out/bin/topmem \
+      --prefix PATH : ${pkgs.lib.makeBinPath [ (pkgs.lua5_4.withPackages (ps: with ps; [ luv ])) ]}
   '';
+
+  meta = with pkgs.lib; {
+    description = "Memory monitor from CachyOS";
+    homepage = "https://github.com/CachyOS/CachyOS-Settings";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    mainProgram = "topmem";
+  };
 }
