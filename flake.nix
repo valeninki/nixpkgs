@@ -16,7 +16,6 @@
       ];
       systems = [
         "x86_64-linux"
-        "aarch64-linux"
       ];
       perSystem =
         { pkgs, self', ... }:
@@ -35,10 +34,7 @@
             inherit (self'.packages) topmem zmem psa-update;
           }
           // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
-            inherit (self'.packages) agopengps;
-          }
-          // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
-            inherit (self'.packages) linux-rpi4-minimal;
+            inherit (self'.packages) agopengps linux-rpi4-minimal;
           };
         };
     };

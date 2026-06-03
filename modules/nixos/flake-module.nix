@@ -14,18 +14,20 @@
           agopengps = pkgs.callPackage ./agopengps {
             wineWow64 = pkgs.wineWow64Packages.stable;
           };
+          linux-rpi4-minimal =
+            let
+              crossPkgs = pkgs.pkgsCross.aarch64-multiplatform;
+            in
+            crossPkgs.callPackage ./linux-rpi4-minimal {
+              rpiKernel = crossPkgs.callPackage "${inputs.nixos-hardware}/raspberry-pi/common/kernel.nix" {
+                rpiVersion = 4;
+              };
+            };
         }
         // {
           topmem = pkgs.callPackage ./topmem { };
           zmem = pkgs.callPackage ./zmem { };
           psa-update = pkgs.callPackage ./psa-update { };
-        }
-        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
-          linux-rpi4-minimal = pkgs.callPackage ./linux-rpi4-minimal {
-            rpiKernel = pkgs.callPackage "${inputs.nixos-hardware}/raspberry-pi/common/kernel.nix" {
-              rpiVersion = 4;
-            };
-          };
         };
     };
 

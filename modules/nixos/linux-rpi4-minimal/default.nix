@@ -12,7 +12,6 @@ let
       DRM n
       MEDIA_SUPPORT n
 
-      HWMON n
       STAGING n
       MACINTOSH n
       ISDN n
