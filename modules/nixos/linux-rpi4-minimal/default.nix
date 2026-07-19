@@ -1,75 +1,77 @@
-{
-  rpiKernel,
-  ...
-}:
+{ lib, stdenv, linux, linuxManualConfig }:
+
 let
-  kernel = rpiKernel.override {
-    extraConfig = ''
-      SOUND n
-      WLAN n
-      BLUETOOTH n
-
-      DRM n
-      MEDIA_SUPPORT n
-
-      STAGING n
-      MACINTOSH n
-      ISDN n
-      PCMCIA n
-
-      JFS_FS n
-      XFS_FS n
-      GFS2_FS n
-      OCFS2_FS n
-      REISERFS_FS n
-      QNX4FS_FS n
-      UFS_FS n
-      SQUASHFS m
-
-      KVM n
-      VHOST_NET n
-
-      I2C y
-      I2C_BCM2835 y
-      SPI y
-      SPI_BCM2835 y
-      GPIO_CDEV y
-      GPIO_CDEV_V1 y
-      BCM2835_WDT y
-      RASPBERRYPI_FIRMWARE y
-      THERMAL y
-
-      USB y
-      USB_DWC2 y
-      USB_STORAGE y
-      USB_HID y
-      USB_SERIAL y
-      USB_SERIAL_PL2303 y
-      USB_SERIAL_CP210X y
-      USB_SERIAL_FTDI_SIO y
-
-      EXT4_FS y
-      VFAT_FS y
-      FUSE_FS y
-
-      NETDEVICES y
-      GENET y
-
-      CRYPTO_AES_ARM64 y
-
-      TMPFS y
-      DEVTMPFS y
-      DEVTMPFS_MOUNT y
-      CGROUPS y
-      FHANDLE y
-      INOTIFY_USER y
-      SYSFS y
-      PROC_FS y
-      SIGNALFD y
-      TIMERFD y
-      EPOLL y
-      NET y
-    '';
+  kernel = linuxManualConfig {
+    src = linux.src;
+    version = linux.version;
+    modDirVersion = linux.modDirVersion;
+    configfile = ./config;
+    kernelPatches = linux.kernelPatches or [];
+    features = {
+      efiBootStub = false;
+    };
   };
 in
-kernel
+kernel.overrideAttrs (old: {
+  postConfigure = (old.postConfigure or "") + ''
+    for opt in \
+      AFFS_FS AFS_FS APPLETALK ATM \
+      BACKLIGHT_CLASS_DEVICE BACKLIGHT_GPIO \
+      BATMAN_ADV BEFS_FS BFS_FS BLUETOOTH BTRFS_FS \
+      CAIF CAN CEPH_FS CIFS CODA_FS CRAMFS \
+      DCCP DRM \
+      ECRYPT_FS EDAC EFS EXOFS_FS \
+      F2FS_FS FDDI FIREWIRE FPGA \
+      GFS2_FS \
+      HAMRADIO HFS_FS HFSPLUS_FS HUGETLBFS HUGETLB_PAGE \
+      IEEE802154 INFINIBAND IPX ISDN \
+      JFFS2_FS JFS_FS \
+      KSMBD KVM \
+      LAPB LOGFS LIVEPATCH \
+      MACINTOSH MEDIA_SUPPORT MINIX_FS \
+      NET_VENDOR_3COM NET_VENDOR_ADAPTEC NET_VENDOR_AGERE \
+      NET_VENDOR_ALACRITECH NET_VENDOR_ALTEON NET_VENDOR_AMAZON \
+      NET_VENDOR_AMD NET_VENDOR_AQUANTIA NET_VENDOR_ARC \
+      NET_VENDOR_ATHEROS NET_VENDOR_BROADCOM_HV \
+      NET_VENDOR_CADENCE NET_VENDOR_CAVIUM NET_VENDOR_CHELSIO \
+      NET_VENDOR_CISCO NET_VENDOR_CORTINA NET_VENDOR_DEC \
+      NET_VENDOR_DLINK NET_VENDOR_EMULEX NET_VENDOR_EZCHIP \
+      NET_VENDOR_GOOGLE NET_VENDOR_HUAWEI NET_VENDOR_I825XX \
+      NET_VENDOR_INTEL NET_VENDOR_MARVELL NET_VENDOR_MEDIATEK \
+      NET_VENDOR_MELLANOX NET_VENDOR_MICREL NET_VENDOR_MICROCHIP \
+      NET_VENDOR_MICROSEMI NET_VENDOR_MOXART NET_VENDOR_MYRI \
+      NET_VENDOR_NATSEMI NET_VENDOR_NETRONOME NET_VENDOR_NI \
+      NET_VENDOR_NVIDIA NET_VENDOR_OKI NET_VENDOR_PACKET_ENGINES \
+      NET_VENDOR_PENSANDO NET_VENDOR_QLOGIC NET_VENDOR_QUALCOMM \
+      NET_VENDOR_RDC NET_VENDOR_ROCKER NET_VENDOR_SAMSUNG \
+      NET_VENDOR_SEEQ NET_VENDOR_SILAN NET_VENDOR_SIS \
+      NET_VENDOR_SOLARFLARE NET_VENDOR_SMSC NET_VENDOR_SOCIONEXT \
+      NET_VENDOR_STMICRO NET_VENDOR_SUN NET_VENDOR_SYNOPSYS \
+      NET_VENDOR_TEHUTI NET_VENDOR_TI NET_VENDOR_VIA \
+      NET_VENDOR_WIZNET NET_VENDOR_XILINX NET_VENDOR_XIRCOM \
+      NFC NFSD NILFS2_FS NTFS_FS NTFS3_FS \
+      OCFS2_FS OMFS_FS OPENVFS ORANGEFS_FS \
+      PCMCIA \
+      QNX4FS_FS QNX6FS_FS QRTR \
+      REISERFS_FS RFKILL ROMFS_FS \
+      SCTP SME SND_SOC SOUND STAGING STAGING_MEDIA SYSV_FS \
+      TIPC \
+      UDF_FS UFS_FS \
+      VIDEOBUF2_CORE VIDEOBUF2_DMA_CONTIG VIDEOBUF2_DMA_SG \
+      VIDEOBUF2_MEMOPS VIDEOBUF2_VMALLOC VIDEO_CAMERA \
+      VIRTIO VIRTIO_BALLOON VIRTIO_BLK VIRTIO_CONSOLE \
+      VIRTIO_INPUT VIRTIO_MMIO VIRTIO_NET VIRTIO_PCI VIRTIO_RNG \
+      VSOCKETS VXFS_FS \
+      WEXT_CORE WEXT_PRIV WEXT_PROC WEXT_SPY WIMAX WLAN WWAN \
+      X25 XEN XFS_FS \
+      ZONEFS_FS ZFS_FS \
+    ; do
+      sed -i -e "/^CONFIG_$opt=[ym]/s/.*/# CONFIG_$opt is not set/" "$buildRoot/.config"
+    done
+
+    make ''${makeFlags[@]} oldconfig
+
+    sed -i "$buildRoot/.config" -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
+    sed -i "$buildRoot/include/config/auto.conf" -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
+  '';
+})

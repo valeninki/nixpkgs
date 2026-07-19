@@ -1,8 +1,7 @@
-{
-  self,
-  lib,
-  inputs,
-  ...
+{ self
+, lib
+, inputs
+, ...
 }:
 {
   perSystem =
@@ -18,10 +17,9 @@
             let
               crossPkgs = pkgs.pkgsCross.aarch64-multiplatform;
             in
-            crossPkgs.callPackage ./linux-rpi4-minimal {
-              rpiKernel = crossPkgs.callPackage "${inputs.nixos-hardware}/raspberry-pi/common/kernel.nix" {
-                rpiVersion = 4;
-              };
+            (import ./linux-rpi4-minimal) {
+              inherit (crossPkgs) lib stdenv linux;
+              linuxManualConfig = crossPkgs.linuxManualConfig;
             };
         }
         // {
@@ -31,17 +29,20 @@
         };
     };
 
+  flake.nixosModules.netui = inputs.netui.nixosModules.default;
+
   flake.nixosModules.default =
-    {
-      pkgs,
-      lib,
-      config,
-      ...
+    { pkgs
+    , lib
+    , config
+    , ...
     }:
     let
       valenPkgs = self.packages.${pkgs.system};
     in
     {
+      imports = [ inputs.netui.nixosModules.default ];
+
       options.valenpkgs = {
         topmem = lib.mkEnableOption "topmem - CachyOS memory monitor";
         zmem = lib.mkEnableOption "zmem - Rust memory monitor";

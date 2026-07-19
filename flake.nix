@@ -6,6 +6,10 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixos-hardware.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    netui = {
+      url = "git+https://git.valentinus.dev/valeninki/netui.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
