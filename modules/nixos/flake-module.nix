@@ -23,13 +23,16 @@
             };
         }
         // {
+          netui = inputs.netui.packages.${pkgs.stdenv.hostPlatform.system}.netui;
           topmem = pkgs.callPackage ./topmem { };
           zmem = pkgs.callPackage ./zmem { };
           psa-update = pkgs.callPackage ./psa-update { };
         };
     };
 
-  flake.nixosModules.netui = inputs.netui.nixosModules.default;
+  flake.overlays.default = final: _prev: {
+    valenpkgs.netui = self.packages.${final.stdenv.hostPlatform.system}.netui;
+  };
 
   flake.nixosModules.default =
     { pkgs
@@ -41,8 +44,6 @@
       valenPkgs = self.packages.${pkgs.system};
     in
     {
-      imports = [ inputs.netui.nixosModules.default ];
-
       options.valenpkgs = {
         topmem = lib.mkEnableOption "topmem - CachyOS memory monitor";
         zmem = lib.mkEnableOption "zmem - Rust memory monitor";
