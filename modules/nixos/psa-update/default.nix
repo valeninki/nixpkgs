@@ -14,7 +14,7 @@ pkgs.rustPlatform.buildRustPackage rec {
     hash = "sha256-1cw91iGtNBILOihC6VNUFSsRVsaxJE0hGkO86L9EKTk=";
   };
 
-  cargoHash = "sha256-pkBjVybga4yUmy8jpUfYi9i8eeRU2sIFEweDZLffP4o=";
+  cargoHash = "sha256-+LNVOuyDoEZjffydY7ZjzMBCq3+wvSMYdbWL3qMBEJk=";
 
   nativeBuildInputs = [ pkgs.pkg-config ];
 
