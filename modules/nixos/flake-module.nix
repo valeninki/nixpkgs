@@ -25,7 +25,7 @@
         // {
           netui = inputs.netui.packages.${pkgs.stdenv.hostPlatform.system}.netui;
           topmem = pkgs.callPackage ./topmem { };
-          zmem = pkgs.callPackage ./zmem { };
+          devilutionx = pkgs.callPackage ./devilutionx { };
           psa-update = pkgs.callPackage ./psa-update { };
         };
     };
@@ -42,11 +42,19 @@
     }:
     let
       valenPkgs = self.packages.${pkgs.system};
+      devilutionx = pkgs.callPackage ./devilutionx {
+        inherit (config.valenpkgs.devilutionx) enableShareware;
+      };
     in
     {
       options.valenpkgs = {
         topmem = lib.mkEnableOption "topmem - CachyOS memory monitor";
-        zmem = lib.mkEnableOption "zmem - Rust memory monitor";
+        devilutionx = {
+          enable = lib.mkEnableOption "DevilutionX - Diablo build for modern operating systems";
+          enableShareware = lib.mkEnableOption "the bundled DevilutionX Shareware assets" // {
+            default = true;
+          };
+        };
         agopengps = lib.mkEnableOption "AgOpenGPS - agricultural guidance";
         psa-update = lib.mkEnableOption "psa-update - Stellantis infotainment update tool";
         linux-rpi4-minimal = lib.mkEnableOption "Minimal headless RPi4 kernel (aarch64 only)";
@@ -56,8 +64,8 @@
         (lib.mkIf config.valenpkgs.topmem {
           environment.systemPackages = [ valenPkgs.topmem ];
         })
-        (lib.mkIf config.valenpkgs.zmem {
-          environment.systemPackages = [ valenPkgs.zmem ];
+        (lib.mkIf config.valenpkgs.devilutionx.enable {
+          environment.systemPackages = [ devilutionx ];
         })
         (lib.mkIf (config.valenpkgs.agopengps && pkgs.stdenv.hostPlatform.isx86_64) {
           environment.systemPackages = [ valenPkgs.agopengps ];
