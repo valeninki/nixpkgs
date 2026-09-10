@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "AgOpenGPS";
-  version = "6.8.1";
+  version = "6.8.6";
 
   src = fetchurl {
     url = "https://github.com/AgOpenGPS-Official/AgOpenGPS/releases/download/${version}/AgOpenGPS_${version}.zip";
-    hash = "sha256-w2tsjX20O9EIRCXP7A4uxVNUSzhESOAMfVm/diQhLRg=";
+    hash = "sha256-CAcbNlYrdD4TZj67yGJ0V6pnbJt+0YDUATdcjvR3CAs=";
   };
 
   dontUnpack = true;
