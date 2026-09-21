@@ -24,6 +24,7 @@
         }
         // {
           netui = inputs.netui.packages.${pkgs.stdenv.hostPlatform.system}.netui;
+          steam-tui = pkgs.callPackage ./steam-tui { };
           topmem = pkgs.callPackage ./topmem { };
           devilutionx = pkgs.callPackage ./devilutionx { };
           psa-update = pkgs.callPackage ./psa-update { };
@@ -32,6 +33,7 @@
 
   flake.overlays.default = final: _prev: {
     valenpkgs.netui = self.packages.${final.stdenv.hostPlatform.system}.netui;
+    valenpkgs.steam-tui = self.packages.${final.stdenv.hostPlatform.system}.steam-tui;
   };
 
   flake.nixosModules.default =
