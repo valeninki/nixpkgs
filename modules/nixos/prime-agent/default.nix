@@ -1,5 +1,7 @@
 {
   lib,
+  makeWrapper,
+  pkgs,
   fetchurl,
   stdenvNoCC,
 }:
@@ -17,6 +19,8 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     runHook preInstall
     tar -xzf $src
@@ -28,6 +32,8 @@ stdenvNoCC.mkDerivation {
     exec $out/lib/prime-agent/prime-agent "\$@"
     EOF
     chmod +x $out/bin/prime-agent
+    wrapProgram $out/bin/prime-agent \
+      --prefix PATH : ${lib.makeBinPath [ pkgs.uv ]}
     runHook postInstall
   '';
 
