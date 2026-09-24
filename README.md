@@ -12,6 +12,7 @@ uses `nixpkgs` from the `nixos-26.05` branch.
 | `netui` | Network-management TUI provided by the upstream `netui` flake. Also available through the default overlay as `pkgs.valenpkgs.netui`. |
 | `topmem` | CachyOS memory-monitoring utility. |
 | `psa-update` | CLI for updating Stellantis infotainment systems. |
+| `prime-agent` | Prime Intellect's coding-agent CLI with persistent sessions and a Python REPL kernel (version 0.9.6). Run it with `nix run .#prime-agent -- --help`. |
 | `agopengps` | AgOpenGPS agricultural guidance application, packaged with Wine for x86_64 Linux. |
 | `linux-rpi4-minimal` | Cross-built minimal headless Raspberry Pi 4 Linux kernel. |
 
