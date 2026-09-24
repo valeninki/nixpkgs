@@ -35,7 +35,7 @@
           };
 
           checks = {
-            inherit (self'.packages) topmem devilutionx psa-update;
+            inherit (self'.packages) topmem devilutionx psa-update prime-agent;
           }
           // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
             inherit (self'.packages) agopengps linux-rpi4-minimal;

@@ -28,6 +28,7 @@
           topmem = pkgs.callPackage ./topmem { };
           devilutionx = pkgs.callPackage ./devilutionx { };
           psa-update = pkgs.callPackage ./psa-update { };
+          prime-agent = pkgs.callPackage ./prime-agent { };
         };
     };
 
