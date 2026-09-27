@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "prime-agent";
-  version = "0.9.6";
+  version = "fhcache-candidate-1";
 
   src = fetchurl {
     url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.9.6/prime-agent-0.9.6-linux-x64.tar.gz";
