@@ -1,17 +1,20 @@
 {
   lib,
+  pkgs,
   fetchurl,
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "prime-agent";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchurl {
-    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.9.6/prime-agent-0.9.6-linux-x64.tar.gz";
-    hash = "sha256-LqeBKjELwWrgyZ//e8odHkZQd684zxA6rRZ/EMISmAE=";
+    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}-linux-x64.tar.gz";
+    hash = "sha256-R5gcGTlryqv6vE1teI5k1VwFcojYZ2/Fczq1JYA74GY=";
   };
+
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -28,6 +31,8 @@ stdenvNoCC.mkDerivation {
     exec $out/lib/prime-agent/prime-agent "\$@"
     EOF
     chmod +x $out/bin/prime-agent
+    wrapProgram $out/bin/prime-agent \
+      --prefix PATH : ${lib.makeBinPath [ pkgs.uv ]}
     runHook postInstall
   '';
 
