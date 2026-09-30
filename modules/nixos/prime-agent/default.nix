@@ -1,25 +1,24 @@
-{
-  lib,
-  makeWrapper,
-  pkgs,
-  fetchurl,
-  stdenvNoCC,
+{ lib
+, pkgs
+, fetchurl
+, stdenvNoCC
+,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "prime-agent";
-  version = "fhcache-candidate-1";
+  version = "0.9.8";
 
   src = fetchurl {
-    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.9.6/prime-agent-0.9.6-linux-x64.tar.gz";
-    hash = "sha256-LqeBKjELwWrgyZ//e8odHkZQd684zxA6rRZ/EMISmAE=";
+    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}-linux-x64.tar.gz";
+    hash = "sha256-g/sJEpv3jj5gJoISzXCTIWZZGxUYjKpwwbDvvMdiNeI=";
   };
+
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
-
-  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +41,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/PrimeIntellect-ai/prime-agent";
     license = lib.licenses.mit;
     mainProgram = "prime-agent";
-    maintainers = [ { name = "Valentinus"; } ];
+    maintainers = [{ name = "Valentinus"; }];
     platforms = [ "x86_64-linux" ];
   };
 }
