@@ -21,7 +21,6 @@
   makeWrapper,
   ninja,
   smpq,
-  enableShareware ? true,
 }:
 
 let
@@ -48,10 +47,10 @@ let
     hash = "sha256-/A77ZM4s+br1hYa0OBdjXcWXUXYG+GiEYcW8VB+UJHo=";
   };
 
-  spawnMpq = fetchurl {
-    # The former raw/master URL is obsolete; upstream publishes this asset as release v5.
-    url = "https://github.com/diasurgical/devilutionx-assets/releases/download/v5/spawn.mpq";
-    hash = "sha256-ZEJ818G6kE6qLgAxwWprE20OzvmryIjF/4NEtFk1bjg=";
+  diabdat = fetchurl {
+    name = "DIABDAT.MPQ";
+    url = "https://pixeldrain.com/api/file/eK8CKhRD";
+    hash = "sha256-wparJNXR0vbAXGeaJy4zy5EWdUx+iFAgYD2b2DMeUhU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -75,11 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    ${lib.optionalString enableShareware ''
-      install -Dm444 "${spawnMpq}" "$out/share/diasurgical/devilutionx/spawn.mpq"
-    ''}
+    install -Dm444 "${diabdat}" "$out/share/diasurgical/devilution/DIABDAT.MPQ"
+    ln -s DIABDAT.MPQ "$out/share/diasurgical/devilution/diabdat.mpq"
     wrapProgram $out/bin/devilutionx \
-      --add-flags "--data-dir $out/share/diasurgical/devilutionx"
+      --add-flags "--data-dir $out/share/diasurgical/devilution"
   '';
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];

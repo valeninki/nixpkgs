@@ -8,7 +8,7 @@ uses `nixpkgs` from the `nixos-26.05` branch.
 
 | Package | Description |
 | --- | --- |
-| `devilutionx` | DevilutionX 1.5.5, a modern Diablo engine build. It includes the upstream `spawn.mpq` Shareware data and starts without further setup. |
+| `devilutionx` | DevilutionX 1.5.5, a modern Diablo engine build. It bundles the full retail `DIABDAT.MPQ` data and starts without further setup. |
 | `netui` | Network-management TUI provided by the upstream `netui` flake. Also available through the default overlay as `pkgs.valenpkgs.netui`. |
 | `topmem` | CachyOS memory-monitoring utility. |
 | `psa-update` | CLI for updating Stellantis infotainment systems. |
@@ -18,17 +18,9 @@ uses `nixpkgs` from the `nixos-26.05` branch.
 
 ### DevilutionX data
 
-The default build installs the upstream Shareware `spawn.mpq` and wraps the
-binary with its installed data directory. To play the retail game, provide
-your legally obtained `DIABDAT.MPQ` in a directory you control and override
-the data directory at launch:
-
-```console
-NIXPKGS_ALLOW_UNFREE=1 nix run --impure .#devilutionx -- \
-  --data-dir /path/to/diablo-data
-```
-
-The retail game data is not distributed by this flake.
+The default build bundles the full retail `DIABDAT.MPQ` from Pixeldrain in
+`share/diasurgical/devilution/` and wraps the binary to use that data directory.
+A lowercase `diabdat.mpq` symlink is included for case-sensitive lookups.
 
 ## NixOS Module
 
@@ -40,15 +32,13 @@ Import the default module, then enable the packages you want:
 
   valenpkgs.devilutionx = {
     enable = true;
-    enableShareware = true; # Default; installs spawn.mpq.
   };
 }
 ```
 
-`valenpkgs.devilutionx.enable` installs DevilutionX. Set
-`valenpkgs.devilutionx.enableShareware` to `false` to omit `spawn.mpq`, for
-example when supplying only retail data. The module also exposes boolean
-options for `topmem`, `agopengps`, `psa-update`, and `linux-rpi4-minimal`.
+`valenpkgs.devilutionx.enable` installs DevilutionX with the bundled retail
+data. The module also exposes boolean options for `topmem`, `agopengps`,
+`psa-update`, and `linux-rpi4-minimal`.
 
 ## Usage and Integration
 
@@ -104,5 +94,5 @@ The development shell provides `nixpkgs-fmt`, `statix`, and `deadnix`:
 ```console
 nix develop
 nix fmt
-NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure
+NIXPKGS_ALLOW_UNFREE=1 nix flake check path:. --no-build --impure
 ```
