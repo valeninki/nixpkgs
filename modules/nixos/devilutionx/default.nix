@@ -20,6 +20,8 @@
   libwebp,
   makeWrapper,
   ninja,
+  unar,
+  innoextract,
   smpq,
 }:
 
@@ -47,8 +49,9 @@ let
     hash = "sha256-/A77ZM4s+br1hYa0OBdjXcWXUXYG+GiEYcW8VB+UJHo=";
   };
 
-  diabdat = fetchurl {
-    name = "DIABDAT.MPQ";
+  # Pixeldrain serves a RAR containing a GOG Inno Setup installer, not an MPQ.
+  retailArchive = fetchurl {
+    name = "diablo-retail.rar";
     url = "https://pixeldrain.com/api/file/eK8CKhRD";
     hash = "sha256-wparJNXR0vbAXGeaJy4zy5EWdUx+iFAgYD2b2DMeUhU=";
   };
@@ -74,8 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm444 "${diabdat}" "$out/share/diasurgical/devilution/DIABDAT.MPQ"
+    unar -quiet -no-directory -o "$TMPDIR" "${retailArchive}" \
+      'setup_diablo_1.09_hellfire_v4_(78466).exe'
+    innoextract -q -I DIABDAT.MPQ -d "$TMPDIR/retail" \
+      "$TMPDIR/setup_diablo_1.09_hellfire_v4_(78466).exe"
+    echo '63fb47d9c76484024c7640d90ab6b7ec5e13f567a7e1a917b6c03a6631d3f2b0  '"$TMPDIR/retail/DIABDAT.MPQ" \
+      | sha256sum -c -
+    install -Dm444 "$TMPDIR/retail/DIABDAT.MPQ" "$out/share/diasurgical/devilution/DIABDAT.MPQ"
     ln -s DIABDAT.MPQ "$out/share/diasurgical/devilution/diabdat.mpq"
+    ln -s ../devilutionx/devilutionx.mpq "$out/share/diasurgical/devilution/devilutionx.mpq"
     wrapProgram $out/bin/devilutionx \
       --add-flags "--data-dir $out/share/diasurgical/devilution"
   '';
@@ -87,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     ninja
+    unar
+    innoextract
     pkg-config
     smpq
   ];
