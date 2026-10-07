@@ -43,18 +43,13 @@
     }:
     let
       valenPkgs = self.packages.${pkgs.system};
-      devilutionx = pkgs.callPackage ./devilutionx {
-        inherit (config.valenpkgs.devilutionx) enableShareware;
-      };
+      devilutionx = pkgs.callPackage ./devilutionx { };
     in
     {
       options.valenpkgs = {
         topmem = lib.mkEnableOption "topmem - CachyOS memory monitor";
         devilutionx = {
           enable = lib.mkEnableOption "DevilutionX - Diablo build for modern operating systems";
-          enableShareware = lib.mkEnableOption "the bundled DevilutionX Shareware assets" // {
-            default = true;
-          };
         };
         agopengps = lib.mkEnableOption "AgOpenGPS - agricultural guidance";
         psa-update = lib.mkEnableOption "psa-update - Stellantis infotainment update tool";
