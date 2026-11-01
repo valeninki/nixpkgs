@@ -5,16 +5,16 @@
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "psa-update";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = pkgs.fetchFromGitHub {
     owner = "zeld";
     repo = pname;
     rev = version;
-    hash = "sha256-wbgt0aIXmbUINteas48A1gOZF5EQlcjyCXa4OX6kDV8=";
+    hash = "sha256-eKCV5ft4cdyX/yDOyMpI2nIf9M8WF9yaQ46nH2zUwSE=";
   };
 
-  cargoHash = "sha256-oq6V+gYcaui+WHwCDPTPycmX3JoA4jri/LM/vhVXH6g=";
+  cargoHash = "sha256-0Hii3ndJW9S3cWZDboJ12cydXWeQ0RSkpneC4Y6YLNo=";
 
   nativeBuildInputs = [ pkgs.pkg-config ];
 
