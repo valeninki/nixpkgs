@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "prime-agent";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}-linux-x64.tar.gz";
-    hash = "sha256-IewhkYP0E03SPc6VchAuaUVgZv43SEZSVWHHdtTRlFw=";
+    hash = "sha256-CWWZYd/eIBzDnx5ptgc4XXCNo+WR8mek/qBJcK+4sAU=";
   };
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
